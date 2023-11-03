@@ -1,0 +1,7 @@
+node_modules/
+
+.tool-versions
+.env
+src/config/dbConnect.js
+prisma/migrations/
+build/
