@@ -32,20 +32,43 @@ class ItemController {
 		}
 	}
 
+	editItemById = async (req: Request, res: Response) => {
+		try {
+			const { id } = req.params
+			const { name, quantity, typeItem, categoryItem } = req.body
+			const item = await prisma.item.update({
+				where: { id: Number(id) },
+				data: {
+					name,
+					quantity,
+					typeItem,
+					categoryItem
+				}
+			})
+			
+			if (!item) return res.json({ message: 'item not found'})
+
+			res.send(item)
+		} catch(error) {
+			res.status(500).send({ error: 'Error, in update item ' })
+		}
+	}
+
 	// Delete item by Id
 	deleteItemById = async (req: Request, res: Response) => {
 		try {
 			const { id } = req.params
-			const user = await prisma.item.delete({
+			const item = await prisma.item.delete({
 				where: { id: Number(id) }
 			})
 
-			if (!user) return res.json({ message: 'item not found' })
+			if (!item) return res.json({ message: 'item not found' })
 
-			res.status(200).json({message: "item deleted successfully"})
+			res.status(200).json({ message: 'item deleted successfully' })
 		} catch (error) {
-			res.status(500).json({ error: 'Erro ao encontrar item' })
+			res.status(500).json({ error: 'Error, in delete item' })
 		}
 	}
 }
+
 export default new ItemController()
